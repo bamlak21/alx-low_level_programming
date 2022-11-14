@@ -1,24 +1,83 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include "dog.h"
 
 /**
- * print_dog - prints a struct dog
- * @d: pointer to struct dog
- *
- * Return: void
- **/
-void print_dog(struct dog *d)
+ * _copy  -   Make a copy of passed in argument
+ * @src:      Data to make copy of
+ * Return:    Pointer
+ */
+
+char *_copy(char *src)
 {
-	if (d)
+	char *ptr;
+	int i, len;
+
+	if (src == NULL)
 	{
-		if (d->name)
-			printf("Name: %s\n", d->name);
-		else
-			printf("Name: (nil)\n");
-		printf("Age: %.6f\n", d->age);
-		if (d->owner)
-			printf("Owner: %s\n", d->owner);
-		else
-			printf("Owner: (nil)\n");
+	return (NULL);
 	}
+
+	for (len = 0; src[len] != '\0'; len++)
+	;
+
+	ptr = malloc(sizeof(char) * (len + 1));
+
+	if (ptr == NULL)
+	{
+	return (NULL);
+	}
+
+	for (i = 0; src[i] != '\0'; i++)
+	{
+	ptr[i] = src[i];
+	}
+
+	ptr[i] = '\0';
+	return (ptr);
+}
+
+/**
+ * new_dog     - Create a new dog variable
+ * @name:        Name of the dog
+ * @age:         Age of the dog
+ * @owner:       Owner of the dog
+ * Return:       Pointer to new dog variable
+ */
+
+dog_t *new_dog(char *name, float age, char *owner)
+{
+	dog_t *snoopie;
+	char *new_name, *new_owner;
+
+	if (name == NULL || owner == NULL)
+	{
+	return (NULL);
+	}
+
+	snoopie = malloc(sizeof(dog_t));
+	if (snoopie == NULL)
+	{
+	return (NULL);
+	}
+
+	new_name = _copy(name);
+	if (new_name == NULL)
+	{
+	free(snoopie);
+	return (NULL);
+	}
+	(*snoopie).name = new_name;
+
+	(*snoopie).age = age;
+
+	new_owner = _copy(owner);
+	if (new_owner == NULL)
+	{
+	free((*snoopie).name);
+	free(snoopie);
+	return (NULL);
+	}
+	(*snoopie).owner = new_owner;
+
+	return (snoopie);
 }
